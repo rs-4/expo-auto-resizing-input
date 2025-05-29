@@ -1,16 +1,15 @@
+import './global.css';
+
 import { StatusBar } from 'expo-status-bar';
-import { 
-  View, 
-  SafeAreaView, 
+import {
+  View,
+  SafeAreaView,
   Alert,
-  KeyboardAvoidingView, 
-  Platform,
+  KeyboardAvoidingView,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
 } from 'react-native';
 import AutoResizingInput from './components/AutoResizingInput';
-
-import './global.css';
 
 export default function App() {
   const handleSend = (text: string) => {
@@ -19,17 +18,10 @@ export default function App() {
 
   return (
     <SafeAreaView className="flex-1 bg-black">
-      <KeyboardAvoidingView 
-        className="flex-1 bg-black"
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
-      >
+      <KeyboardAvoidingView className="flex-1 bg-black" behavior={'padding'} enabled={true}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View className="flex-1 justify-end bg-black">
-            <AutoResizingInput
-              onSend={handleSend}
-              placeholder="Type your message..."
-            />
+            <AutoResizingInput onSend={handleSend} placeholder="Type your message..." />
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

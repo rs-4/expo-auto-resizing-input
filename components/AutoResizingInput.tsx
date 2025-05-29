@@ -1,11 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {
-  View,
-  TextInput,
-  Text,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, Platform } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -21,21 +15,21 @@ interface AutoResizingInputProps {
 
 const AutoResizingInput: React.FC<AutoResizingInputProps> = ({
   onSend,
-  placeholder = "Type your message...",
+  placeholder = 'Type your message...',
 }) => {
   const [text, setText] = useState('');
   const [inputHeight, setInputHeight] = useState(20);
   const inputRef = useRef<TextInput>(null);
-  
+
   // Animation for send button press
   const animationProgress = useSharedValue(0);
-  
+
   const handleSend = () => {
     if (text.trim()) {
       onSend?.(text.trim());
       setText('');
       setInputHeight(20);
-      
+
       // Quick animation
       animationProgress.value = withSpring(1, { damping: 15 });
       setTimeout(() => {
@@ -46,7 +40,7 @@ const AutoResizingInput: React.FC<AutoResizingInputProps> = ({
 
   const handleTextChange = (newText: string) => {
     setText(newText);
-    
+
     // Calculate height based on lines
     const lines = newText.split('\n');
     const lineCount = Math.max(1, lines.length);
@@ -70,27 +64,29 @@ const AutoResizingInput: React.FC<AutoResizingInputProps> = ({
   // Container height = input height + padding for icons/buttons
   const containerHeight = inputHeight + 80;
 
-  // Simple animated styles
+  // Simple animated styles - only animate scale, not height to avoid conflict with KeyboardAvoidingView
   const animatedContainerStyle = useAnimatedStyle(() => {
     const scale = interpolate(animationProgress.value, [0, 1], [1, 0.95]);
     return {
       transform: [{ scale }],
-      height: containerHeight,
     };
   });
 
   return (
-    <View className="px-4 pb-6 pt-1 justify-end">
+    <View className="justify-end px-4 pb-6 pt-1">
       <Animated.View
-        style={[animatedContainerStyle]}
-        className="bg-zinc-900 border border-zinc-700 rounded-2xl overflow-hidden"
-      >
+        style={[
+          animatedContainerStyle,
+          {
+            height: containerHeight,
+          },
+        ]}
+        className="overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900">
         {/* Input area */}
-        <TouchableOpacity 
-          activeOpacity={1} 
+        <TouchableOpacity
+          activeOpacity={1}
           onPress={handleInputContainerPress}
-          className="flex-1 px-6 pt-2 mt-1"
-        >
+          className="mt-1 flex-1 px-6 pt-2">
           <TextInput
             ref={inputRef}
             value={text}
@@ -99,12 +95,15 @@ const AutoResizingInput: React.FC<AutoResizingInputProps> = ({
             placeholder={placeholder}
             placeholderTextColor="#9CA3AF"
             multiline
-            className="text-white text-base"
+            className="text-base text-white"
             textAlignVertical="top"
-            style={{ 
-              fontSize: 16, 
+            style={{
+              fontSize: 16,
               lineHeight: 20,
               height: inputHeight + 15,
+              ...(Platform.OS === 'android' && {
+                marginTop: 4,
+              }),
               // Remove focus outline/border
               ...(Platform.OS === 'web' && {
                 outline: 'none',
@@ -121,15 +120,15 @@ const AutoResizingInput: React.FC<AutoResizingInputProps> = ({
             <TouchableOpacity className="mr-4 p-1">
               <MaterialIcons name="attach-file" size={20} color="#9CA3AF" />
             </TouchableOpacity>
-            
+
             <TouchableOpacity className="mr-4 p-1">
               <Ionicons name="rocket" size={20} color="#9CA3AF" />
             </TouchableOpacity>
-            
+
             <TouchableOpacity className="mr-4 p-1">
               <MaterialIcons name="auto-awesome" size={20} color="#9CA3AF" />
             </TouchableOpacity>
-            
+
             <TouchableOpacity className="p-1">
               <MaterialIcons name="science" size={20} color="#9CA3AF" />
             </TouchableOpacity>
@@ -139,15 +138,8 @@ const AutoResizingInput: React.FC<AutoResizingInputProps> = ({
           <TouchableOpacity
             onPress={handleSend}
             disabled={!text.trim()}
-            className={`px-4 py-2 rounded-full ${
-              text.trim() ? 'bg-white ' : 'bg-zinc-700'
-            }`}
-          >
-            <Text 
-              className={`font-medium ${
-                text.trim() ? 'text-black' : 'text-gray-400'
-              }`}
-            >
+            className={`rounded-full px-4 py-2 ${text.trim() ? 'bg-white ' : 'bg-zinc-700'}`}>
+            <Text className={`font-medium ${text.trim() ? 'text-black' : 'text-gray-400'}`}>
               Send
             </Text>
           </TouchableOpacity>
