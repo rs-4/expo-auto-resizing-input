@@ -2,28 +2,49 @@
 
 A React Native component that provides an auto-resizing text input with animated expansion, similar to modern messaging apps like iMessage or WhatsApp.
 
-## Features
+## ✨ Features
 
-- ✅ **Auto-resizing**: Container grows upward as you type multiple lines
-- ✅ **Smooth animations**: Built with React Native Reanimated for 60fps performance
-- ✅ **Send button**: Adaptive button that changes color based on input state
-- ✅ **Action icons**: Four customizable action buttons (attach, rocket, magic, science)
-- ✅ **Mobile optimized**: Works with keyboard handling on iOS and Android
-- ✅ **TypeScript**: Fully typed with TypeScript support
+- 🚀 **Auto-resizing**: Container grows upward as you type multiple lines
+- 🎬 **Smooth animations**: Built with React Native Reanimated for 60fps performance
+- 📱 **Cross-platform**: Works on iOS, Android, and Web
+- 🎯 **Send button**: Adaptive button that changes color based on input state
+- 🔧 **Action icons**: Four customizable action buttons (attach, rocket, magic, science)
+- ⌨️ **Keyboard shortcuts**: Enter to send, Shift+Enter for new line (Web)
+- 🎨 **Modern UI**: Dark theme with Tailwind CSS styling
+- 📝 **TypeScript**: Fully typed with TypeScript support
 
-## Preview
+## 🛠️ Platform Support
 
-The component automatically expands from a compact single-line input to a multi-line textarea while maintaining smooth animations and keeping the bottom position fixed.
+| Platform | Status | Notes |
+|----------|--------|-------|
+| **iOS** | ✅ Full Support | Native animations, keyboard handling |
+| **Android** | ✅ Full Support | Native animations, keyboard handling |
+| **Web** | ✅ Full Support | Keyboard shortcuts, focus management |
 
-## Installation
+## 📋 Requirements
 
-Make sure you have the required dependencies:
+| Dependency | Version | Required |
+|------------|---------|----------|
+| **Expo SDK** | 53.0.0+ | ✅ |
+| **React Native** | 0.79+ | ✅ |
+| **React Native Reanimated** | 3.17+ | ✅ |
+| **Expo Vector Icons** | 14.0+ | ✅ |
+| **Tailwind CSS (NativeWind)** | Latest | ✅ |
+| **TypeScript** | 5.8+ | ✅ |
+| **React DOM** | 19.0.0 | ✅ (Web only) |
+| **React Native Web** | 0.20+ | ✅ (Web only) |
+
+## 🚀 Installation
 
 ```bash
+# Install core dependencies
 npm install react-native-reanimated @expo/vector-icons
+
+# For web support (optional)
+npm install react-native-web react-dom@19.0.0 --legacy-peer-deps
 ```
 
-## Usage
+## 📖 Usage
 
 ```tsx
 import AutoResizingInput from './components/AutoResizingInput';
@@ -45,14 +66,14 @@ export default function App() {
 }
 ```
 
-## Props
+## 🎛️ Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `onSend` | `(text: string) => void` | `undefined` | Callback function called when send button is pressed |
 | `placeholder` | `string` | `"Type your message..."` | Placeholder text for the input field |
 
-## How it works
+## ⚙️ How it works
 
 ### Auto-resizing Logic
 - Calculates height based on number of lines (`\n` characters)
@@ -65,11 +86,41 @@ export default function App() {
 - Send button has a subtle scale animation when pressed
 - Container height changes are smooth and native
 
-### Mobile Keyboard Handling
+### Platform-specific Features
+
+#### Mobile (iOS/Android)
+- Touch-optimized interactions
+- Native keyboard handling
+- Smooth 60fps animations
+
+#### Web
+- **Enter** to send message
+- **Shift+Enter** for new line
+- Click anywhere in input area to focus
+- No focus outline for clean design
+
+## 🎨 Styling
+
+The component uses Tailwind CSS (NativeWind) classes:
+
+| Element | Classes | Description |
+|---------|---------|-------------|
+| Container | `bg-zinc-900 border-zinc-700 rounded-2xl` | Dark theme with rounded corners |
+| Input | `text-white text-base` | White text, standard size |
+| Send Button | `bg-white` / `bg-zinc-700` | White when active, gray when disabled |
+| Icons | `text-gray-400` | Subtle gray icons |
+
+## 📱 Mobile Setup
+
 Recommended setup in your main App component:
 
 ```tsx
-import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { 
+  KeyboardAvoidingView, 
+  TouchableWithoutFeedback, 
+  Keyboard, 
+  Platform 
+} from 'react-native';
 
 export default function App() {
   return (
@@ -89,79 +140,60 @@ export default function App() {
 }
 ```
 
-## Styling
+## 🌐 Web Deployment
 
-The component uses Tailwind CSS classes for styling. Key classes used:
-- `bg-zinc-900`: Dark background
-- `border-zinc-700`: Subtle border
-- `rounded-2xl`: Rounded corners
-- `text-white`: White text
-- `bg-white` / `bg-zinc-700`: Send button states
+For web deployment, ensure you have:
 
-## Web Limitations ⚠️
+```bash
+# Install web dependencies
+npm install react-native-web react-dom@19.0.0 @expo/metro-runtime --legacy-peer-deps
 
-**This component is NOT optimized for web browsers** for the following reasons:
-
-### 1. **React Native Reanimated Web Support**
-- Reanimated's web support is limited and can be buggy
-- Some animations may not work smoothly or at all
-- Performance on web is significantly worse than native
-
-### 2. **Mobile-specific UX Patterns**
-- Designed for touch interactions, not mouse/keyboard
-- Keyboard handling is mobile-specific (`KeyboardAvoidingView`)
-- Visual design optimized for mobile screens
-
-### 3. **Missing Web Features**
-- No proper focus management for web accessibility
-- No keyboard shortcuts (Enter to send, etc.)
-- No desktop-specific UI patterns
-
-### 4. **TextInput Behavior**
-- `textAlignVertical="top"` doesn't work consistently on web
-- Multiline behavior differs between platforms
-- Auto-resize calculations may be inaccurate
-
-### 5. **Performance Issues**
-- Reanimated worklets don't optimize well for web
-- Frequent re-renders can cause lag in browsers
-- Animation smoothness is not guaranteed
-
-## Web Alternative
-
-For web applications, consider using:
-- Regular HTML `<textarea>` with CSS `resize: none`
-- CSS `field-sizing: content` (modern browsers)
-- Web-specific libraries like `react-textarea-autosize`
-- Custom CSS animations instead of Reanimated
-
-Example web-friendly alternative:
-```css
-textarea {
-  field-sizing: content;
-  min-height: 20px;
-  max-height: 120px;
-  resize: none;
-}
+# Start web development server
+npx expo start --web
 ```
 
-## Development
+## 🔧 Customization
 
-The component was built with:
-- React Native 0.79+
-- React Native Reanimated 3.17+
-- Expo Vector Icons
-- TypeScript
-- Tailwind CSS (NativeWind)
+### Changing Colors
+Modify the Tailwind classes in the component:
+```tsx
+// Container background
+className="bg-zinc-900" // Change to your preferred color
 
-## Contributing
+// Send button active state  
+className="bg-white" // Change to your brand color
+```
+
+### Adjusting Height Calculation
+Modify the line height calculation:
+```tsx
+const newInputHeight = lineCount * 25; // Change from 20 to 25 for taller lines
+```
+
+## 🐛 Troubleshooting
+
+### Web Issues
+- **Page won't load**: Check react-dom version is exactly 19.0.0
+- **Focus issues**: Ensure you're clicking in the input area
+- **Animations laggy**: This is expected, web performance is lower than native
+
+### Mobile Issues
+- **Keyboard covers input**: Use KeyboardAvoidingView wrapper
+- **Animations choppy**: Ensure Reanimated is properly installed
+- **Height not updating**: Check if onContentSizeChange is firing
+
+## 🤝 Contributing
 
 When contributing:
-1. Test on both iOS and Android devices
-2. Ensure animations are smooth (60fps)
-3. Follow the existing TypeScript patterns
-4. Update this README if adding new features
+1. Test on iOS, Android, and Web
+2. Ensure animations are smooth (60fps on mobile)
+3. Follow TypeScript patterns
+4. Update this README if adding features
 
-## License
+## 📄 License
 
-MIT License - feel free to use in your projects! 
+MIT License - feel free to use in your projects!
+
+---
+
+Built with ❤️ using React Native, Reanimated, and Tailwind CSS 
